@@ -3,27 +3,12 @@ canvas.width = 1660;
 canvas.height = 930;
 const ctx = canvas.getContext("2d");
 const fps = 60;
+const msPerFrame = 1000 / fps;
+let msPrev = performance.now();
 
 let horizontalDirection = "";
 let verticalDirection = "";
-let msPrev = performance.now();
-const msPerFrame = 1000 / fps;
 
-const spriteImage = new Image();
-spriteImage.src = "./assets/sprites.png";
-
-class MyMap {
-    constructor() {
-        this.position = {
-            x: -2800,
-            y: -1920,
-        };
-        this.width = 7000;
-        this.height = 4800;
-    }
-
-    draw() {}
-}
 
 class Player {
     constructor() {
@@ -33,50 +18,16 @@ class Player {
         };
 
         this.width = 50;
-        this.height = 100;
-        this.count = 0;
-        this.frames = 0;
+        this.height = 50;
     }
 
     draw() {
-        let imageSelectY = 0;
-
-        if (horizontalDirection === "right") {
-            imageSelectY = 768;
-        } else if (horizontalDirection === "left") {
-            imageSelectY = 640;
-        } else if (verticalDirection === "up") {
-            imageSelectY = 896;
-        } else if (verticalDirection === "down") {
-            imageSelectY = 512;
-        }
-
-        ctx.drawImage(
-            spriteImage,
-            64 * this.frames,
-            imageSelectY,
-            64,
-            128,
-            this.position.x,
-            this.position.y,
-            this.width,
-            this.height
-        );
-    }
-
-    update() {
-        this.count++;
-        if (this.count > 3) {
-            this.frames++;
-            this.count = 0;
-        }
-        if (this.frames > 7) this.frames = 0;
-        this.draw();
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 }
 
 const player = new Player();
-const map = new MyMap();
 
 function mainLoop() {
     requestAnimationFrame(mainLoop);
@@ -92,20 +43,7 @@ function mainLoop() {
     // constantly run fps at desired value
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    map.draw();
-    player.update();
-
-    if (verticalDirection === "up") {
-        map.position.y += 6;
-    } else if (verticalDirection === "down") {
-        map.position.y -= 6;
-    }
-
-    if (horizontalDirection === "left") {
-        map.position.x += 6;
-    } else if (horizontalDirection === "right") {
-        map.position.x -= 6;
-    }
+    player.draw();
 }
 
 mainLoop();
