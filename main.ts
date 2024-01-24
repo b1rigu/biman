@@ -12,6 +12,33 @@ const msPerFrame = 1000 / fps;
 const spriteImage = new Image();
 spriteImage.src = "./assets/sprites.png";
 
+const mapImage = new Image();
+mapImage.src = "./assets/map.jpg";
+mapImage.style.objectFit = "cover";
+
+class MyMap {
+    position: {
+        x: number;
+        y: number;
+    };
+
+    width: number;
+    height: number;
+
+    constructor() {
+        this.position = {
+            x: -2800,
+            y: -1920,
+        };
+        this.width = 7000;
+        this.height = 4800;
+    }
+
+    draw() {
+        ctx.drawImage(mapImage, this.position.x, this.position.y, this.width, this.height);
+    }
+}
+
 class Player {
     position: {
         x: number;
@@ -31,15 +58,15 @@ class Player {
 
     constructor() {
         this.position = {
-            x: 100,
-            y: 100,
+            x: Math.floor(canvas.width / 2),
+            y: Math.floor(canvas.height / 2),
         };
         this.velocity = {
             x: 0,
             y: 0,
         };
-        this.width = 64;
-        this.height = 128;
+        this.width = 50;
+        this.height = 100;
         this.count = 0;
         this.frames = 0;
     }
@@ -72,7 +99,7 @@ class Player {
 
     update() {
         this.count++;
-        if (this.count > 1) {
+        if (this.count > 3) {
             this.frames++;
             this.count = 0;
         }
@@ -96,6 +123,7 @@ class Player {
 }
 
 const player = new Player();
+const map = new MyMap();
 
 function mainLoop() {
     requestAnimationFrame(mainLoop);
@@ -111,24 +139,27 @@ function mainLoop() {
     // constantly run fps at desired value
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    map.draw();
     player.update();
 
     if (verticalDirection === "up") {
-        player.velocity.y = -10;
+        map.position.y += 6;
+        // player.velocity.y = -10;
     } else if (verticalDirection === "down") {
-        player.velocity.y = 10;
+        map.position.y -= 6;
+        // player.velocity.y = 10;
     } else {
-        player.velocity.y = 0;
+        // player.velocity.y = 0;
     }
 
     if (horizontalDirection === "left") {
-        player.velocity.x = -10;
+        // player.velocity.x = -10;
+        map.position.x += 6;
     } else if (horizontalDirection === "right") {
-        player.velocity.x = 10;
+        map.position.x -= 6;
+        // player.velocity.x = 10;
     } else {
-        player.velocity.x = 0;
+        // player.velocity.x = 0;
     }
 }
 
