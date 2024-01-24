@@ -1,5 +1,7 @@
 const canvas = document.querySelector("canvas");
-const ctx = canvas?.getContext("2d");
+canvas.width = 1660;
+canvas.height = 930;
+const ctx = canvas.getContext("2d");
 
 let horizontalDirection: "left" | "right" | "" = "";
 let verticalDirection: "up" | "down" | "" = "";
@@ -40,43 +42,51 @@ class Player {
 
     update() {
         this.draw();
-        this.position.y += this.velocity.y;
-        this.position.x += this.velocity.x;
+
+        console.log(this.position.x + this.width + this.velocity.x);
+        console.log(this.position.y + this.height + this.velocity.y);
+
+        if (
+            this.position.x + this.velocity.x >= 0 &&
+            this.position.x + this.width + this.velocity.x <= canvas.width
+        ) {
+            this.position.x += this.velocity.x;
+        }
+
+        if (
+            this.position.y + this.height + this.velocity.y <= canvas.height &&
+            this.position.y + this.velocity.y >= 0
+        ) {
+            this.position.y += this.velocity.y;
+        }
     }
 }
 
 const player = new Player();
 
 function mainLoop() {
-    if (canvas && ctx) {
-        requestAnimationFrame(mainLoop);
+    requestAnimationFrame(mainLoop);
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        player.update();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    player.update();
 
-        if (verticalDirection === "up") {
-            player.velocity.y = -10;
-        } else if (verticalDirection === "down") {
-            player.velocity.y = 10;
-        } else {
-            player.velocity.y = 0;
-        }
-
-        if (horizontalDirection === "left") {
-            player.velocity.x = -10;
-        } else if (horizontalDirection === "right") {
-            player.velocity.x = 10;
-        } else {
-            player.velocity.x = 0;
-        }
+    if (verticalDirection === "up") {
+        player.velocity.y = -10;
+    } else if (verticalDirection === "down") {
+        player.velocity.y = 10;
+    } else {
+        player.velocity.y = 0;
     }
-}
 
-if (canvas) {
-    canvas.width = 1664;
-    canvas.height = 936;
+    if (horizontalDirection === "left") {
+        player.velocity.x = -10;
+    } else if (horizontalDirection === "right") {
+        player.velocity.x = 10;
+    } else {
+        player.velocity.x = 0;
+    }
 }
 
 mainLoop();

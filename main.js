@@ -1,5 +1,7 @@
 var canvas = document.querySelector("canvas");
-var ctx = canvas === null || canvas === void 0 ? void 0 : canvas.getContext("2d");
+canvas.width = 1660;
+canvas.height = 930;
+var ctx = canvas.getContext("2d");
 var horizontalDirection = "";
 var verticalDirection = "";
 var Player = /** @class */ (function () {
@@ -23,42 +25,44 @@ var Player = /** @class */ (function () {
     };
     Player.prototype.update = function () {
         this.draw();
-        this.position.y += this.velocity.y;
-        this.position.x += this.velocity.x;
+        console.log(this.position.x + this.width + this.velocity.x);
+        console.log(this.position.y + this.height + this.velocity.y);
+        if (this.position.x + this.velocity.x >= 0 &&
+            this.position.x + this.width + this.velocity.x <= canvas.width) {
+            this.position.x += this.velocity.x;
+        }
+        if (this.position.y + this.height + this.velocity.y <= canvas.height &&
+            this.position.y + this.velocity.y >= 0) {
+            this.position.y += this.velocity.y;
+        }
     };
     return Player;
 }());
 var player = new Player();
 function mainLoop() {
-    if (canvas && ctx) {
-        requestAnimationFrame(mainLoop);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        player.update();
-        if (verticalDirection === "up") {
-            player.velocity.y = -10;
-        }
-        else if (verticalDirection === "down") {
-            player.velocity.y = 10;
-        }
-        else {
-            player.velocity.y = 0;
-        }
-        if (horizontalDirection === "left") {
-            player.velocity.x = -10;
-        }
-        else if (horizontalDirection === "right") {
-            player.velocity.x = 10;
-        }
-        else {
-            player.velocity.x = 0;
-        }
+    requestAnimationFrame(mainLoop);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    player.update();
+    if (verticalDirection === "up") {
+        player.velocity.y = -10;
     }
-}
-if (canvas) {
-    canvas.width = 1664;
-    canvas.height = 936;
+    else if (verticalDirection === "down") {
+        player.velocity.y = 10;
+    }
+    else {
+        player.velocity.y = 0;
+    }
+    if (horizontalDirection === "left") {
+        player.velocity.x = -10;
+    }
+    else if (horizontalDirection === "right") {
+        player.velocity.x = 10;
+    }
+    else {
+        player.velocity.x = 0;
+    }
 }
 mainLoop();
 document.addEventListener("keydown", function (event) {
