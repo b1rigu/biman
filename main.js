@@ -2,8 +2,13 @@ var canvas = document.querySelector("canvas");
 canvas.width = 1660;
 canvas.height = 930;
 var ctx = canvas.getContext("2d");
+var fps = 31;
 var horizontalDirection = "";
 var verticalDirection = "";
+var msPrev = performance.now();
+var msPerFrame = 1000 / fps;
+var spriteImage = new Image();
+spriteImage.src = "./assets/sprites.png";
 var Player = /** @class */ (function () {
     function Player() {
         this.position = {
@@ -14,19 +19,36 @@ var Player = /** @class */ (function () {
             x: 0,
             y: 0,
         };
-        this.width = 30;
-        this.height = 30;
+        this.width = 64;
+        this.height = 128;
+        this.count = 0;
+        this.frames = 0;
     }
     Player.prototype.draw = function () {
-        if (ctx) {
-            ctx.fillStyle = "red";
-            ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        var imageSelectY = 0;
+        if (horizontalDirection === "right") {
+            imageSelectY = 768;
         }
+        else if (horizontalDirection === "left") {
+            imageSelectY = 640;
+        }
+        else if (verticalDirection === "up") {
+            imageSelectY = 896;
+        }
+        else if (verticalDirection === "down") {
+            imageSelectY = 512;
+        }
+        ctx.drawImage(spriteImage, 64 * this.frames, imageSelectY, 64, 128, this.position.x, this.position.y, this.width, this.height);
     };
     Player.prototype.update = function () {
+        this.count++;
+        if (this.count > 1) {
+            this.frames++;
+            this.count = 0;
+        }
+        if (this.frames > 7)
+            this.frames = 0;
         this.draw();
-        console.log(this.position.x + this.width + this.velocity.x);
-        console.log(this.position.y + this.height + this.velocity.y);
         if (this.position.x + this.velocity.x >= 0 &&
             this.position.x + this.width + this.velocity.x <= canvas.width) {
             this.position.x += this.velocity.x;
@@ -41,6 +63,14 @@ var Player = /** @class */ (function () {
 var player = new Player();
 function mainLoop() {
     requestAnimationFrame(mainLoop);
+    // constantly run fps at desired value
+    var msNow = performance.now();
+    var msPassed = msNow - msPrev;
+    if (msPassed < msPerFrame)
+        return;
+    var excessTime = msPassed % msPerFrame;
+    msPrev = msNow - excessTime;
+    // constantly run fps at desired value
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);

@@ -2,9 +2,15 @@ const canvas = document.querySelector("canvas");
 canvas.width = 1660;
 canvas.height = 930;
 const ctx = canvas.getContext("2d");
+const fps = 31;
 
 let horizontalDirection: "left" | "right" | "" = "";
 let verticalDirection: "up" | "down" | "" = "";
+let msPrev = performance.now();
+const msPerFrame = 1000 / fps;
+
+const spriteImage = new Image();
+spriteImage.src = "./assets/sprites.png";
 
 class Player {
     position: {
@@ -20,6 +26,9 @@ class Player {
     width: number;
     height: number;
 
+    count: number;
+    frames: number;
+
     constructor() {
         this.position = {
             x: 100,
@@ -29,22 +38,46 @@ class Player {
             x: 0,
             y: 0,
         };
-        this.width = 30;
-        this.height = 30;
+        this.width = 64;
+        this.height = 128;
+        this.count = 0;
+        this.frames = 0;
     }
 
     draw() {
-        if (ctx) {
-            ctx.fillStyle = "red";
-            ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+        let imageSelectY = 0;
+
+        if (horizontalDirection === "right") {
+            imageSelectY = 768;
+        } else if (horizontalDirection === "left") {
+            imageSelectY = 640;
+        } else if (verticalDirection === "up") {
+            imageSelectY = 896;
+        } else if (verticalDirection === "down") {
+            imageSelectY = 512;
         }
+
+        ctx.drawImage(
+            spriteImage,
+            64 * this.frames,
+            imageSelectY,
+            64,
+            128,
+            this.position.x,
+            this.position.y,
+            this.width,
+            this.height
+        );
     }
 
     update() {
+        this.count++;
+        if (this.count > 1) {
+            this.frames++;
+            this.count = 0;
+        }
+        if (this.frames > 7) this.frames = 0;
         this.draw();
-
-        console.log(this.position.x + this.width + this.velocity.x);
-        console.log(this.position.y + this.height + this.velocity.y);
 
         if (
             this.position.x + this.velocity.x >= 0 &&
@@ -66,6 +99,16 @@ const player = new Player();
 
 function mainLoop() {
     requestAnimationFrame(mainLoop);
+
+    // constantly run fps at desired value
+    const msNow = performance.now();
+    const msPassed = msNow - msPrev;
+
+    if (msPassed < msPerFrame) return;
+
+    const excessTime = msPassed % msPerFrame;
+    msPrev = msNow - excessTime;
+    // constantly run fps at desired value
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
