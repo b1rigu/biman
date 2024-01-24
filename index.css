@@ -1,0 +1,13 @@
+canvas {
+    width: 1664px;
+    height: 936px;
+}
+
+body {
+    background-color: black;
+    margin: 0;
+    height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
