@@ -2,7 +2,7 @@ const canvas = document.querySelector("canvas");
 canvas.width = 1660;
 canvas.height = 930;
 const ctx = canvas.getContext("2d");
-const fps = 31;
+const fps = 60;
 
 let horizontalDirection: "left" | "right" | "" = "";
 let verticalDirection: "up" | "down" | "" = "";
