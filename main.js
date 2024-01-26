@@ -1,14 +1,17 @@
 const canvas = document.querySelector("canvas");
-canvas.width = 1660;
-canvas.height = 930;
+canvas.width = 1024;
+canvas.height = 567;
 const ctx = canvas.getContext("2d");
 const fps = 60;
 const msPerFrame = 1000 / fps;
 let msPrev = performance.now();
+ctx.imageSmoothingEnabled = false;
 
 let horizontalDirection = "";
 let verticalDirection = "";
 
+const gg = new Image();
+gg.src = "./assets/what.png"
 
 class Player {
     constructor() {
@@ -43,6 +46,7 @@ function mainLoop() {
     // constantly run fps at desired value
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(gg, -1300, -1200, 1792 * 4, 768 * 4);
     player.draw();
 }
 
