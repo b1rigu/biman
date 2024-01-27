@@ -40,12 +40,10 @@ class Sprite {
 }
 
 class Boundary {
-    static width = 48;
-    static height = 48;
-    constructor({ position }) {
+    constructor({ position, widthHeight }) {
         this.position = position;
-        this.width = 48;
-        this.height = 48;
+        this.width = widthHeight;
+        this.height = widthHeight;
     }
 
     draw() {

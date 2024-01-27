@@ -1,21 +1,21 @@
 const fps = 60;
 const playerSpeed = 5;
-const tilesPerRowOnMap = 70;
-
+const tilesPerRowOnMap = 167;
+const backgroundScale = 4;
+const collisionWidthHeightPx = 16;
+const offset = {
+    x: -6500,
+    y: -1350,
+};
 
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 canvas.width = 1024;
 canvas.height = 576;
+c.imageSmoothingEnabled = false;
 const msPerFrame = 1000 / fps;
 let msPrev = performance.now();
-c.imageSmoothingEnabled = false;
-
-
-const offset = {
-    x: -740,
-    y: -650,
-};
+const collisionWidthHeightScaled = collisionWidthHeightPx * backgroundScale;
 
 const collisionsMap = [];
 
@@ -27,13 +27,14 @@ const boundaries = [];
 
 collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
-        if (symbol === 1025) {
+        if (symbol === 17202) {
             boundaries.push(
                 new Boundary({
                     position: {
-                        x: j * Boundary.width + offset.x,
-                        y: i * Boundary.height + offset.y,
+                        x: j * collisionWidthHeightScaled + offset.x,
+                        y: i * collisionWidthHeightScaled + offset.y,
                     },
+                    widthHeight: collisionWidthHeightScaled,
                 })
             );
         }
@@ -90,10 +91,10 @@ document.addEventListener("keyup", (event) => {
 });
 
 const backgroundImage = new Image();
-backgroundImage.src = "./img/Pellet Town.png";
+backgroundImage.src = "./img/firstMap.png";
 
-const foregroundImage = new Image();
-foregroundImage.src = "./img/foregroundObjects.png";
+// const foregroundImage = new Image();
+// foregroundImage.src = "./img/foregroundObjects.png";
 
 const playerDownImage = new Image();
 playerDownImage.src = "./img/playerDown.png";
@@ -133,16 +134,16 @@ const background = new Sprite({
     scale: 4,
 });
 
-const foreground = new Sprite({
-    position: {
-        x: offset.x,
-        y: offset.y,
-    },
-    image: foregroundImage,
-    scale: 4,
-});
+// const foreground = new Sprite({
+//     position: {
+//         x: offset.x,
+//         y: offset.y,
+//     },
+//     image: foregroundImage,
+//     scale: 4,
+// });
 
-const movables = [background, ...boundaries, foreground];
+const movables = [background, ...boundaries];
 
 function isRectangularsColliding({ rectangle1, rectangle2 }) {
     return (
@@ -171,7 +172,6 @@ function animate() {
         boundary.draw();
     });
     player.draw();
-    foreground.draw();
 
     player.moving = false;
 
