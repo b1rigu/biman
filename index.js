@@ -1,7 +1,7 @@
 const fps = 60;
 const playerSpeed = 6;
 const tilesPerRowOnMap = 167;
-const backgroundScale = 4;
+const backgroundScale = 3;
 const collisionWidthHeightPx = 16;
 const collisionSymbol = 22379;
 
@@ -28,7 +28,7 @@ const keys = {
 };
 
 const rainImage = createImage("./img/rain7.png");
-const backgroundImage = createImage("./img/newmap.png");
+const backgroundImage = createImage("./img/maprain.png");
 const foregroundImage = createImage("./img/foreground.png");
 const playerDownImage = createImage("./img/playerDown.png");
 const playerUpImage = createImage("./img/playerUp.png");
@@ -58,9 +58,14 @@ const background = new Sprite({
         x: offset.x,
         y: offset.y,
     },
+    frames: {
+        max: 3,
+    },
     image: backgroundImage,
     scale: backgroundScale,
+    frameSpeed: 15,
 });
+background.moving = true;
 
 const foreground = new Sprite({
     position: {

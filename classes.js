@@ -1,5 +1,5 @@
 class Sprite {
-    constructor({ position, image, scale = 1, frames = { max: 1 }, sprites }) {
+    constructor({ position, image, scale = 1, frames = { max: 1 }, sprites, frameSpeed = 8 }) {
         this.position = position;
         this.image = image;
         this.scale = scale;
@@ -15,6 +15,7 @@ class Sprite {
         };
         this.moving = false;
         this.sprites = sprites;
+        this.frameSpeed = frameSpeed;
     }
 
     draw() {
@@ -36,7 +37,7 @@ class Sprite {
         }
 
         this.frames.elapsed++;
-        if (this.frames.elapsed % 8 === 0) {
+        if (this.frames.elapsed % this.frameSpeed === 0) {
             this.frames.elapsed = 0;
             if (this.frames.val < this.frames.max - 1) this.frames.val++;
             else this.frames.val = 0;
