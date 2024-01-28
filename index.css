@@ -1,0 +1,34 @@
+body {
+    height: 100vh;
+    background-color: black;
+    margin: 0;
+    image-rendering: pixelated;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+canvas {
+    display: none;
+}
+
+.main-menu {
+    width: 1024px;
+    height: 576px;
+    object-fit: cover;
+    position: relative;
+}
+
+.play-button {
+    width: 350px;
+    height: 150px;
+    position: absolute;
+    bottom: 40px;
+    left: calc(1024px / 2 - 350px / 2);
+}
+
+.play-button:hover {
+    width: 385px;
+    height: 180px;
+    left: calc(1024px / 2 - 385px / 2);
+}

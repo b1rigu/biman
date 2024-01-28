@@ -167,15 +167,7 @@ function animate() {
     }
 }
 
-animate();
-
-let clicked = false;
 document.addEventListener("keydown", (event) => {
-    if (!clicked) {
-        audio.map.play("main");
-        clicked = true;
-    }
-
     switch (event.key) {
         case "w":
             keys.w.pressed = true;
@@ -207,4 +199,15 @@ document.addEventListener("keyup", (event) => {
             keys.d.pressed = false;
             break;
     }
+});
+
+let clicked = false;
+document.querySelector(".play-button").addEventListener("click", (event) => {
+    if (!clicked) {
+        audio.map.play("main");
+        clicked = true;
+    }
+    document.querySelector(".main-menu").style.display = "none";
+    document.querySelector("canvas").style.display = "block";
+    animate();
 });
