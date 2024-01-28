@@ -3,45 +3,15 @@ const playerSpeed = 6;
 const tilesPerRowOnMap = 167;
 const backgroundScale = 4;
 const collisionWidthHeightPx = 16;
+
+const canvas = getCanvas(1024, 576);
+const c = getContext2d(canvas);
 const offset = {
-    x: -6500,
-    y: -1350,
+    x: canvas.width / 2 - 1767 * backgroundScale,
+    y: canvas.height / 2 - 914 * backgroundScale,
 };
 
-const canvas = document.querySelector("canvas");
-const c = canvas.getContext("2d");
-canvas.width = 1024;
-canvas.height = 576;
-c.imageSmoothingEnabled = false;
-const msPerFrame = 1000 / fps;
-let msPrev = performance.now();
-const collisionWidthHeightScaled = collisionWidthHeightPx * backgroundScale;
-
-const collisionsMap = [];
-
-for (let i = 0; i < collisions.length; i += tilesPerRowOnMap) {
-    collisionsMap.push(collisions.slice(i, i + tilesPerRowOnMap));
-}
-
-const boundaries = [];
-
-collisionsMap.forEach((row, i) => {
-    row.forEach((symbol, j) => {
-        if (symbol === 22379) {
-            boundaries.push(
-                new Boundary({
-                    position: {
-                        x: j * collisionWidthHeightScaled + offset.x,
-                        y: i * collisionWidthHeightScaled + offset.y,
-                    },
-                    widthHeight: collisionWidthHeightScaled,
-                })
-            );
-        }
-    });
-});
-
-let keys = {
+const keys = {
     w: {
         pressed: false,
     },
@@ -56,60 +26,12 @@ let keys = {
     },
 };
 
-document.addEventListener("keydown", (event) => {
-    switch (event.key) {
-        case "w":
-            keys.w.pressed = true;
-            break;
-        case "a":
-            keys.a.pressed = true;
-            break;
-        case "s":
-            keys.s.pressed = true;
-            break;
-        case "d":
-            keys.d.pressed = true;
-            break;
-    }
-});
-
-document.addEventListener("keyup", (event) => {
-    switch (event.key) {
-        case "w":
-            keys.w.pressed = false;
-            break;
-        case "a":
-            keys.a.pressed = false;
-            break;
-        case "s":
-            keys.s.pressed = false;
-            break;
-        case "d":
-            keys.d.pressed = false;
-            break;
-    }
-});
-
-const backgroundImage = new Image();
-backgroundImage.src = "./img/newmap.png";
-
-const foregroundImage = new Image();
-foregroundImage.src = "./img/foreground.png";
-
-const rainImage = new Image();
-rainImage.src = "./img/rain7.png";
-
-const playerDownImage = new Image();
-playerDownImage.src = "./img/playerDown.png";
-
-const playerUpImage = new Image();
-playerUpImage.src = "./img/playerUp.png";
-
-const playerLeftImage = new Image();
-playerLeftImage.src = "./img/playerLeft.png";
-
-const playerRightImage = new Image();
-playerRightImage.src = "./img/playerRight.png";
+const backgroundImage = createImage("./img/newmap.png");
+const foregroundImage = createImage("./img/foreground.png");
+const playerDownImage = createImage("./img/playerDown.png");
+const playerUpImage = createImage("./img/playerUp.png");
+const playerLeftImage = createImage("./img/playerLeft.png");
+const playerRightImage = createImage("./img/playerRight.png");
 
 const player = new Sprite({
     position: {
@@ -126,7 +48,7 @@ const player = new Sprite({
         left: playerLeftImage,
         right: playerRightImage,
     },
-    scale: 3
+    scale: backgroundScale / 1.5,
 });
 
 const background = new Sprite({
@@ -147,43 +69,20 @@ const foreground = new Sprite({
     scale: backgroundScale,
 });
 
-const rain = new Sprite({
-    position: {
-        x: 0,
-        y: 0,
-    },
-    image: rainImage,
-    frames: {
-        max: 5,
-    },
-    scale: 2,
-});
-rain.moving = true;
-
-
-function isRectangularsColliding({ rectangle1, rectangle2 }) {
-    return (
-        rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
-        rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-        rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
-        rectangle1.position.y + rectangle1.height >= rectangle2.position.y
-    );
-}
+const boundaries = getBoundaries(
+    22379,
+    collisionWidthHeightPx,
+    backgroundScale,
+    offset,
+    tilesPerRowOnMap
+);
 
 const movables = [background, ...boundaries, foreground];
 
 function animate() {
     requestAnimationFrame(animate);
 
-    // constantly run fps at desired value
-    const msNow = performance.now();
-    const msPassed = msNow - msPrev;
-
-    if (msPassed < msPerFrame) return;
-
-    const excessTime = msPassed % msPerFrame;
-    msPrev = msNow - excessTime;
-    // constantly run fps at desired value
+    if (!canRunLoop(fps)) return;
 
     background.draw();
     boundaries.forEach((boundary) => {
@@ -191,7 +90,6 @@ function animate() {
     });
     player.draw();
     foreground.draw();
-    rain.draw();
 
     player.moving = false;
 
@@ -249,3 +147,37 @@ function animate() {
 }
 
 animate();
+
+document.addEventListener("keydown", (event) => {
+    switch (event.key) {
+        case "w":
+            keys.w.pressed = true;
+            break;
+        case "a":
+            keys.a.pressed = true;
+            break;
+        case "s":
+            keys.s.pressed = true;
+            break;
+        case "d":
+            keys.d.pressed = true;
+            break;
+    }
+});
+
+document.addEventListener("keyup", (event) => {
+    switch (event.key) {
+        case "w":
+            keys.w.pressed = false;
+            break;
+        case "a":
+            keys.a.pressed = false;
+            break;
+        case "s":
+            keys.s.pressed = false;
+            break;
+        case "d":
+            keys.d.pressed = false;
+            break;
+    }
+});
