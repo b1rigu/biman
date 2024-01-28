@@ -15,7 +15,7 @@ class Sprite {
     draw() {
         c.drawImage(
             this.image,
-            this.frames.val * this.width,
+            this.frames.val * this.image.width / this.frames.max,
             0,
             this.image.width / this.frames.max,
             this.image.height,
@@ -31,7 +31,7 @@ class Sprite {
         }
 
         this.frames.elapsed++;
-        if (this.frames.elapsed % 10 === 0) {
+        if (this.frames.elapsed % 8 === 0) {
             this.frames.elapsed = 0;
             if (this.frames.val < this.frames.max - 1) this.frames.val++;
             else this.frames.val = 0;

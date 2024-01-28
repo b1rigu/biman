@@ -1,5 +1,5 @@
 const fps = 60;
-const playerSpeed = 5;
+const playerSpeed = 6;
 const tilesPerRowOnMap = 167;
 const backgroundScale = 4;
 const collisionWidthHeightPx = 16;
@@ -27,7 +27,7 @@ const boundaries = [];
 
 collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
-        if (symbol === 17202) {
+        if (symbol === 22379) {
             boundaries.push(
                 new Boundary({
                     position: {
@@ -91,10 +91,13 @@ document.addEventListener("keyup", (event) => {
 });
 
 const backgroundImage = new Image();
-backgroundImage.src = "./img/firstMap.png";
+backgroundImage.src = "./img/newmap.png";
 
-// const foregroundImage = new Image();
-// foregroundImage.src = "./img/foregroundObjects.png";
+const foregroundImage = new Image();
+foregroundImage.src = "./img/foreground.png";
+
+const rainImage = new Image();
+rainImage.src = "./img/rain7.png";
 
 const playerDownImage = new Image();
 playerDownImage.src = "./img/playerDown.png";
@@ -110,8 +113,8 @@ playerRightImage.src = "./img/playerRight.png";
 
 const player = new Sprite({
     position: {
-        x: canvas.width / 2 - 192 / 8,
-        y: canvas.height / 2 - 68 / 2,
+        x: canvas.width / 2 - 64 / 8,
+        y: canvas.height / 2 - 16 / 2,
     },
     image: playerDownImage,
     frames: {
@@ -123,6 +126,7 @@ const player = new Sprite({
         left: playerLeftImage,
         right: playerRightImage,
     },
+    scale: 3
 });
 
 const background = new Sprite({
@@ -134,14 +138,28 @@ const background = new Sprite({
     scale: backgroundScale,
 });
 
-// const foreground = new Sprite({
-//     position: {
-//         x: offset.x,
-//         y: offset.y,
-//     },
-//     image: foregroundImage,
-//     scale: 4,
-// });
+const foreground = new Sprite({
+    position: {
+        x: offset.x,
+        y: offset.y,
+    },
+    image: foregroundImage,
+    scale: backgroundScale,
+});
+
+const rain = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
+    },
+    image: rainImage,
+    frames: {
+        max: 5,
+    },
+    scale: 2,
+});
+rain.moving = true;
+
 
 function isRectangularsColliding({ rectangle1, rectangle2 }) {
     return (
@@ -152,7 +170,7 @@ function isRectangularsColliding({ rectangle1, rectangle2 }) {
     );
 }
 
-const movables = [background, ...boundaries];
+const movables = [background, ...boundaries, foreground];
 
 function animate() {
     requestAnimationFrame(animate);
@@ -172,6 +190,8 @@ function animate() {
         boundary.draw();
     });
     player.draw();
+    foreground.draw();
+    rain.draw();
 
     player.moving = false;
 
