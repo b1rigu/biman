@@ -27,6 +27,7 @@ const keys = {
     },
 };
 
+const rainImage = createImage("./img/rain7.png");
 const backgroundImage = createImage("./img/newmap.png");
 const foregroundImage = createImage("./img/foreground.png");
 const playerDownImage = createImage("./img/playerDown.png");
@@ -78,6 +79,19 @@ const boundaries = getBoundaries(
     tilesPerRowOnMap
 );
 
+const rain = new Sprite({
+    position: {
+        x: 0,
+        y: 0,
+    },
+    image: rainImage,
+    frames: {
+        max: 5,
+    },
+    scale: 2,
+});
+rain.moving = true;
+
 const movables = [background, ...boundaries, foreground];
 
 function animate() {
@@ -91,6 +105,7 @@ function animate() {
     });
     player.draw();
     foreground.draw();
+    rain.draw();
 
     player.moving = false;
 
@@ -149,7 +164,13 @@ function animate() {
 
 animate();
 
+let clicked = false;
 document.addEventListener("keydown", (event) => {
+    if (!clicked) {
+        audio.map.play("main");
+        clicked = true;
+    }
+
     switch (event.key) {
         case "w":
             keys.w.pressed = true;
