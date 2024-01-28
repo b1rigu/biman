@@ -131,7 +131,7 @@ const background = new Sprite({
         y: offset.y,
     },
     image: backgroundImage,
-    scale: 4,
+    scale: backgroundScale,
 });
 
 // const foreground = new Sprite({
@@ -143,8 +143,6 @@ const background = new Sprite({
 //     scale: 4,
 // });
 
-const movables = [background, ...boundaries];
-
 function isRectangularsColliding({ rectangle1, rectangle2 }) {
     return (
         rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
@@ -153,6 +151,8 @@ function isRectangularsColliding({ rectangle1, rectangle2 }) {
         rectangle1.position.y + rectangle1.height >= rectangle2.position.y
     );
 }
+
+const movables = [background, ...boundaries];
 
 function animate() {
     requestAnimationFrame(animate);
@@ -205,26 +205,26 @@ function animate() {
             }
         }
 
-        if (moving) {
-            movables.forEach((movable) => {
-                if (keys.w.pressed) {
-                    player.image = player.sprites.up;
-                    movable.position.y += playerSpeed;
-                }
-                if (keys.s.pressed) {
-                    player.image = player.sprites.down;
-                    movable.position.y -= playerSpeed;
-                }
-                if (keys.a.pressed) {
-                    player.image = player.sprites.left;
-                    movable.position.x += playerSpeed;
-                }
-                if (keys.d.pressed) {
-                    player.image = player.sprites.right;
-                    movable.position.x -= playerSpeed;
-                }
-            });
-        }
+        if (!moving) return;
+
+        movables.forEach((movable) => {
+            if (keys.w.pressed) {
+                player.image = player.sprites.up;
+                movable.position.y += playerSpeed;
+            }
+            if (keys.s.pressed) {
+                player.image = player.sprites.down;
+                movable.position.y -= playerSpeed;
+            }
+            if (keys.a.pressed) {
+                player.image = player.sprites.left;
+                movable.position.x += playerSpeed;
+            }
+            if (keys.d.pressed) {
+                player.image = player.sprites.right;
+                movable.position.x -= playerSpeed;
+            }
+        });
     }
 }
 
