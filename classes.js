@@ -3,6 +3,11 @@ class Sprite {
         this.position = position;
         this.image = image;
         this.scale = scale;
+
+        if (scale === 0) {
+            this.scale = 0.5;
+        }
+
         this.frames = { ...frames, val: 0, elapsed: 0 };
         this.image.onload = () => {
             this.width = (this.image.width / this.frames.max) * this.scale;

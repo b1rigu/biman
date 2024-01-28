@@ -3,6 +3,7 @@ const playerSpeed = 6;
 const tilesPerRowOnMap = 167;
 const backgroundScale = 4;
 const collisionWidthHeightPx = 16;
+const collisionSymbol = 22379;
 
 const canvas = getCanvas(1024, 576);
 const c = getContext2d(canvas);
@@ -48,7 +49,7 @@ const player = new Sprite({
         left: playerLeftImage,
         right: playerRightImage,
     },
-    scale: backgroundScale / 1.5,
+    scale: backgroundScale - 1,
 });
 
 const background = new Sprite({
@@ -70,7 +71,7 @@ const foreground = new Sprite({
 });
 
 const boundaries = getBoundaries(
-    22379,
+    collisionSymbol,
     collisionWidthHeightPx,
     backgroundScale,
     offset,
