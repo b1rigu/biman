@@ -1,5 +1,5 @@
-const fps = 60;
-const playerSpeed = 6;
+const fps = 30;
+const playerSpeed = 8;
 const tilesPerRowOnMap = 167;
 const backgroundScale = 3;
 const collisionWidthHeightPx = 16;
@@ -63,7 +63,7 @@ const background = new Sprite({
     },
     image: backgroundImage,
     scale: backgroundScale,
-    frameSpeed: 15,
+    frameSpeed: 8,
 });
 background.moving = true;
 
