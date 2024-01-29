@@ -30,7 +30,7 @@ function getCanvas(width, height) {
 }
 
 function getContext2d(canvas) {
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext("2d", { alpha: false });
     context.imageSmoothingEnabled = false;
     return context;
 }

@@ -81,14 +81,6 @@ const foreground = new Sprite({
     scale: backgroundScale,
 });
 
-const boundaries = getBoundaries(
-    collisionSymbol,
-    collisionWidthHeightPx,
-    backgroundScale,
-    offset,
-    tilesPerRowOnMap
-);
-
 const rain = new Sprite({
     position: {
         x: 0,
@@ -102,6 +94,14 @@ const rain = new Sprite({
 });
 rain.moving = true;
 
+const boundaries = getBoundaries(
+    collisionSymbol,
+    collisionWidthHeightPx,
+    backgroundScale,
+    offset,
+    tilesPerRowOnMap
+);
+
 const movables = [background, ...boundaries, foreground];
 
 function animate() {
@@ -110,9 +110,9 @@ function animate() {
     if (!canRunLoop(fps)) return;
 
     background.draw();
-    boundaries.forEach((boundary) => {
+    for (const boundary of boundaries) {
         boundary.draw();
-    });
+    }
     player.draw();
     foreground.draw();
     rain.draw();
@@ -121,55 +121,58 @@ function animate() {
 
     player.moving = false;
 
-    if (keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed) {
-        player.moving = true;
-        let moving = true;
+    if (!keys.w.pressed && !keys.s.pressed && !keys.a.pressed && !keys.d.pressed) return;
 
-        for (const boundary of boundaries) {
-            const boundaryCopied = JSON.parse(JSON.stringify(boundary));
-            if (keys.w.pressed) {
-                boundaryCopied.position.y += playerSpeed;
-            }
-            if (keys.s.pressed) {
-                boundaryCopied.position.y -= playerSpeed;
-            }
-            if (keys.a.pressed) {
-                boundaryCopied.position.x += playerSpeed;
-            }
-            if (keys.d.pressed) {
-                boundaryCopied.position.x -= playerSpeed;
-            }
+    player.moving = true;
 
-            if (
-                isRectangularsColliding({
-                    rectangle1: player,
-                    rectangle2: boundaryCopied,
-                })
-            ) {
-                moving = false;
-                break;
-            }
+    for (const boundary of boundaries) {
+        const boundaryCopied = {
+            position: { x: boundary.position.x, y: boundary.position.y },
+            width: boundary.width,
+            height: boundary.height,
+        };
+        if (keys.w.pressed) {
+            boundaryCopied.position.y += playerSpeed;
+        }
+        if (keys.s.pressed) {
+            boundaryCopied.position.y -= playerSpeed;
+        }
+        if (keys.a.pressed) {
+            boundaryCopied.position.x += playerSpeed;
+        }
+        if (keys.d.pressed) {
+            boundaryCopied.position.x -= playerSpeed;
         }
 
-        if (!moving) return;
+        if (
+            isRectangularsColliding({
+                rectangle1: player,
+                rectangle2: boundaryCopied,
+            })
+        ) {
+            player.moving = false;
+            break;
+        }
+    }
 
-        for (const movable of movables) {
-            if (keys.w.pressed) {
-                player.image = player.sprites.up;
-                movable.position.y += playerSpeed;
-            }
-            if (keys.s.pressed) {
-                player.image = player.sprites.down;
-                movable.position.y -= playerSpeed;
-            }
-            if (keys.a.pressed) {
-                player.image = player.sprites.left;
-                movable.position.x += playerSpeed;
-            }
-            if (keys.d.pressed) {
-                player.image = player.sprites.right;
-                movable.position.x -= playerSpeed;
-            }
+    if (!player.moving) return;
+
+    for (const movable of movables) {
+        if (keys.w.pressed) {
+            player.image = player.sprites.up;
+            movable.position.y += playerSpeed;
+        }
+        if (keys.s.pressed) {
+            player.image = player.sprites.down;
+            movable.position.y -= playerSpeed;
+        }
+        if (keys.a.pressed) {
+            player.image = player.sprites.left;
+            movable.position.x += playerSpeed;
+        }
+        if (keys.d.pressed) {
+            player.image = player.sprites.right;
+            movable.position.x -= playerSpeed;
         }
     }
 }
