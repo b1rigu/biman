@@ -6,7 +6,12 @@ const collisionWidthHeightPx = 16;
 const collisionSymbol = 22379;
 
 const canvas = getCanvas(1024, 576);
-const c = getContext2d(canvas);
+const context = getContext2d(canvas);
+const backgroundCanvas = document.createElement("canvas");
+backgroundCanvas.width = 1024;
+backgroundCanvas.height = 576;
+const backgroundContext = getContext2d(backgroundCanvas);
+
 const offset = {
     x: canvas.width / 2 - 1767 * backgroundScale,
     y: canvas.height / 2 - 914 * backgroundScale,
@@ -112,14 +117,16 @@ function animate() {
     foreground.draw();
     rain.draw();
 
+    context.drawImage(backgroundCanvas, 0, 0);
+
     player.moving = false;
 
     if (keys.w.pressed || keys.s.pressed || keys.a.pressed || keys.d.pressed) {
         player.moving = true;
         let moving = true;
 
-        for (let i = 0; i < boundaries.length; i++) {
-            const boundaryCopied = JSON.parse(JSON.stringify(boundaries[i]));
+        for (const boundary of boundaries) {
+            const boundaryCopied = JSON.parse(JSON.stringify(boundary));
             if (keys.w.pressed) {
                 boundaryCopied.position.y += playerSpeed;
             }
@@ -146,7 +153,7 @@ function animate() {
 
         if (!moving) return;
 
-        movables.forEach((movable) => {
+        for (const movable of movables) {
             if (keys.w.pressed) {
                 player.image = player.sprites.up;
                 movable.position.y += playerSpeed;
@@ -163,7 +170,7 @@ function animate() {
                 player.image = player.sprites.right;
                 movable.position.x -= playerSpeed;
             }
-        });
+        }
     }
 }
 

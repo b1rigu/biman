@@ -30,9 +30,9 @@ function getCanvas(width, height) {
 }
 
 function getContext2d(canvas) {
-    const c = canvas.getContext("2d");
-    c.imageSmoothingEnabled = false;
-    return c;
+    const context = canvas.getContext("2d");
+    context.imageSmoothingEnabled = false;
+    return context;
 }
 
 function getBoundaries(searchSymbol, collisionWidthHeightPx, backgroundScale, offset, tilesPerRowOnMap) {

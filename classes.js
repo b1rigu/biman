@@ -19,7 +19,7 @@ class Sprite {
     }
 
     draw() {
-        c.drawImage(
+        backgroundContext.drawImage(
             this.image,
             this.frames.val * this.image.width / this.frames.max,
             0,
@@ -53,7 +53,7 @@ class Boundary {
     }
 
     draw() {
-        c.fillStyle = "transparent";
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
+        backgroundContext.fillStyle = "transparent";
+        backgroundContext.fillRect(this.position.x, this.position.y, this.width, this.height);
     }
 }
