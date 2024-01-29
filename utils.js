@@ -76,3 +76,53 @@ function createImage(path) {
     image.src = path;
     return image;
 }
+
+function checkHorizontalCollision(rect1, boundary) {
+    const boundaryCopied = {
+        position: { x: boundary.position.x, y: boundary.position.y },
+        width: boundary.width,
+        height: boundary.height,
+    };
+
+    if (keys.a.pressed) {
+        boundaryCopied.position.x += currentPlayerSpeed;
+    }
+    if (keys.d.pressed) {
+        boundaryCopied.position.x -= currentPlayerSpeed;
+    }
+
+    if (
+        isRectangularsColliding({
+            rectangle1: rect1,
+            rectangle2: boundaryCopied,
+        })
+    ) {
+        return true;
+    }
+    return false;
+}
+
+function checkVerticalCollision(rect1, boundary) {
+    const boundaryCopied = {
+        position: { x: boundary.position.x, y: boundary.position.y },
+        width: boundary.width,
+        height: boundary.height,
+    };
+
+    if (keys.w.pressed) {
+        boundaryCopied.position.y += currentPlayerSpeed;
+    }
+    if (keys.s.pressed) {
+        boundaryCopied.position.y -= currentPlayerSpeed;
+    }
+
+    if (
+        isRectangularsColliding({
+            rectangle1: rect1,
+            rectangle2: boundaryCopied,
+        })
+    ) {
+        return true;
+    }
+    return false;
+}

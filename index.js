@@ -119,58 +119,39 @@ const boundaries = getBoundaries(
 
 const movables = [background, ...boundaries, foreground];
 
-function checkHorizontalCollision(rect1, boundary) {
-    const boundaryCopied = {
-        position: { x: boundary.position.x, y: boundary.position.y },
-        width: boundary.width,
-        height: boundary.height,
-    };
+let storySequencyTimelineIndex = 0;
+function storySequencePlayer() {
+    backgroundContext.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+    mainContext.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
-    if (keys.a.pressed) {
-        boundaryCopied.position.x += currentPlayerSpeed;
+    switch (storySequencyTimelineIndex) {
+        case 0:
+            backgroundContext.fillStyle = "white";
+            backgroundContext.font = "40px arial";
+            let textString = "Year 2023, Someplace in the countryside";
+            const textWidth = backgroundContext.measureText(textString).width;
+            backgroundContext.fillText(
+                textString,
+                backgroundCanvas.width / 2 - textWidth / 2,
+                backgroundCanvas.height / 2
+            );
+            mainContext.drawImage(backgroundCanvas, 0, 0);
+            setTimeout(() => {
+                storySequencyTimelineIndex++;
+                storySequencePlayer();
+            }, 5000);
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            mainLoop();
+            break;
     }
-    if (keys.d.pressed) {
-        boundaryCopied.position.x -= currentPlayerSpeed;
-    }
-
-    if (
-        isRectangularsColliding({
-            rectangle1: rect1,
-            rectangle2: boundaryCopied,
-        })
-    ) {
-        return true;
-    }
-    return false;
 }
 
-function checkVerticalCollision(rect1, boundary) {
-    const boundaryCopied = {
-        position: { x: boundary.position.x, y: boundary.position.y },
-        width: boundary.width,
-        height: boundary.height,
-    };
-
-    if (keys.w.pressed) {
-        boundaryCopied.position.y += currentPlayerSpeed;
-    }
-    if (keys.s.pressed) {
-        boundaryCopied.position.y -= currentPlayerSpeed;
-    }
-
-    if (
-        isRectangularsColliding({
-            rectangle1: rect1,
-            rectangle2: boundaryCopied,
-        })
-    ) {
-        return true;
-    }
-    return false;
-}
-
-function animate() {
-    requestAnimationFrame(animate);
+function mainLoop() {
+    requestAnimationFrame(mainLoop);
 
     if (!canRunLoop(fps)) return;
 
@@ -212,7 +193,7 @@ function animate() {
     if (!canMoveHorizontally && !canMoveVertically) {
         player.moving = false;
         return;
-    };
+    }
 
     for (const movable of movables) {
         if (canMoveVertically) {
@@ -291,5 +272,5 @@ document.querySelector(".play-button").addEventListener("click", (_) => {
     }
     document.querySelector(".main-menu").style.display = "none";
     document.querySelector("canvas").style.display = "block";
-    animate();
+    storySequencePlayer();
 });
