@@ -180,7 +180,8 @@ function animate() {
 }
 
 document.addEventListener("keydown", (event) => {
-    switch (event.key) {
+    event.preventDefault();
+    switch (event.key.toLowerCase()) {
         case "w":
             keys.w.pressed = true;
             break;
@@ -197,7 +198,8 @@ document.addEventListener("keydown", (event) => {
 });
 
 document.addEventListener("keyup", (event) => {
-    switch (event.key) {
+    event.preventDefault();
+    switch (event.key.toLowerCase()) {
         case "w":
             keys.w.pressed = false;
             break;
