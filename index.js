@@ -142,7 +142,7 @@ function storySequencePlayer() {
             }, 5000);
             break;
         case 1:
-            
+            // TODO
             break;
         case 2:
             mainLoop();
