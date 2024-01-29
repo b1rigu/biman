@@ -35,9 +35,15 @@ function getContext2d(canvas) {
     return context;
 }
 
-function getBoundaries(searchSymbol, collisionWidthHeightPx, backgroundScale, offset, tilesPerRowOnMap) {
+function getBoundaries(
+    searchSymbol,
+    collisionWidthHeightPx,
+    backgroundScale,
+    offset,
+    tilesPerRowOnMap
+) {
     const collisionWidthHeightScaled = collisionWidthHeightPx * backgroundScale;
-    
+
     const collisionsMap = [];
 
     for (let i = 0; i < collisions.length; i += tilesPerRowOnMap) {
