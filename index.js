@@ -4,17 +4,19 @@ const tilesPerRowOnMap = 167;
 const backgroundScale = 3;
 const collisionWidthHeightPx = 16;
 const collisionSymbol = 22379;
+const canvasWidth = 1024;
+const canvasHeight = 576;
 
-const canvas = getCanvas(1024, 576);
-const context = getContext2d(canvas);
+const mainCanvas = getCanvas(canvasWidth, canvasHeight);
+const mainContext = getContext2d(mainCanvas);
 const backgroundCanvas = document.createElement("canvas");
-backgroundCanvas.width = 1024;
-backgroundCanvas.height = 576;
+backgroundCanvas.width = canvasWidth;
+backgroundCanvas.height = canvasHeight;
 const backgroundContext = getContext2d(backgroundCanvas);
 
 const offset = {
-    x: canvas.width / 2 - 1767 * backgroundScale,
-    y: canvas.height / 2 - 914 * backgroundScale,
+    x: backgroundCanvas.width / 2 - 1767 * backgroundScale,
+    y: backgroundCanvas.height / 2 - 914 * backgroundScale,
 };
 
 const keys = {
@@ -42,8 +44,8 @@ const playerRightImage = createImage("./img/playerRight.png");
 
 const player = new Sprite({
     position: {
-        x: canvas.width / 2 - 64 / 8,
-        y: canvas.height / 2 - 16 / 2,
+        x: backgroundCanvas.width / 2 - 64 / 8,
+        y: backgroundCanvas.height / 2 - 16 / 2,
     },
     image: playerDownImage,
     frames: {
@@ -117,7 +119,7 @@ function animate() {
     foreground.draw();
     rain.draw();
 
-    context.drawImage(backgroundCanvas, 0, 0);
+    mainContext.drawImage(backgroundCanvas, 0, 0);
 
     player.moving = false;
 
