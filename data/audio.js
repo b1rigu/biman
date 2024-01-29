@@ -1,6 +1,6 @@
 const audio = {
     map: new Howl({
-        src: "./audio/rain.wav",
+        src: "./audio/rain.ogg",
         volume: 0.1,
         html5: true,
         sprite: {
@@ -8,7 +8,7 @@ const audio = {
         },
     }),
     walk: new Howl({
-        src: "./audio/walk.wav",
+        src: "./audio/walk.ogg",
         volume: 0.2,
         html5: true,
         sprite: {
