@@ -44,8 +44,9 @@ const playerDownImage = createImage("./img/playerDown.png");
 const playerUpImage = createImage("./img/playerUp.png");
 const playerLeftImage = createImage("./img/playerLeft.png");
 const playerRightImage = createImage("./img/playerRight.png");
+const shadowImage = createImage("./img/shadow.png");
 
-const player = new Sprite({
+const player = new Player({
     position: {
         x: backgroundCanvas.width / 2 - 64 / 8,
         y: backgroundCanvas.height / 2 - 16 / 2,
@@ -60,6 +61,15 @@ const player = new Sprite({
         left: playerLeftImage,
         right: playerRightImage,
     },
+    scale: backgroundScale - 1,
+});
+
+const shadow = new Sprite({
+    position: {
+        x: backgroundCanvas.width / 2 - 4,
+        y: backgroundCanvas.height / 2 + 16,
+    },
+    image: shadowImage,
     scale: backgroundScale - 1,
 });
 
@@ -164,13 +174,14 @@ function animate() {
 
     if (!canRunLoop(fps)) return;
 
-    background.draw();
+    background.update();
     for (const boundary of boundaries) {
         boundary.draw();
     }
-    player.draw();
-    foreground.draw();
-    rain.draw();
+    shadow.update();
+    player.update();
+    foreground.update();
+    rain.update();
 
     mainContext.drawImage(backgroundCanvas, 0, 0);
 
