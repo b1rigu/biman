@@ -1,5 +1,5 @@
-const fps = 30;
-const playerSpeed = 8;
+const fps = 60;
+const playerSpeed = 5;
 const tilesPerRowOnMap = 167;
 const backgroundScale = 3;
 const collisionWidthHeightPx = 16;
@@ -68,7 +68,7 @@ const background = new Sprite({
     },
     image: backgroundImage,
     scale: backgroundScale,
-    frameSpeed: 8,
+    frameSpeed: 15,
 });
 background.moving = true;
 
@@ -212,7 +212,7 @@ document.addEventListener("keyup", (event) => {
 });
 
 let clicked = false;
-document.querySelector(".play-button").addEventListener("click", (event) => {
+document.querySelector(".play-button").addEventListener("click", (_) => {
     if (!clicked) {
         audio.map.play("main");
         clicked = true;
