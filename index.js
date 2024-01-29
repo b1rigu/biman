@@ -1,11 +1,12 @@
 const fps = 60;
-const playerSpeed = 5;
+const maxPlayerSpeed = 5;
 const tilesPerRowOnMap = 167;
 const backgroundScale = 3;
 const collisionWidthHeightPx = 16;
 const collisionSymbol = 22379;
 const canvasWidth = 1024;
 const canvasHeight = 576;
+const defaultFrameSpeed = 8;
 
 const mainCanvas = getCanvas(canvasWidth, canvasHeight);
 const mainContext = getContext2d(mainCanvas);
@@ -13,6 +14,8 @@ const backgroundCanvas = document.createElement("canvas");
 backgroundCanvas.width = canvasWidth;
 backgroundCanvas.height = canvasHeight;
 const backgroundContext = getContext2d(backgroundCanvas);
+
+let currentPlayerSpeed = maxPlayerSpeed;
 
 const offset = {
     x: backgroundCanvas.width / 2 - 1767 * backgroundScale,
@@ -134,16 +137,16 @@ function animate() {
             height: boundary.height,
         };
         if (keys.w.pressed) {
-            boundaryCopied.position.y += playerSpeed;
+            boundaryCopied.position.y += currentPlayerSpeed;
         }
         if (keys.s.pressed) {
-            boundaryCopied.position.y -= playerSpeed;
+            boundaryCopied.position.y -= currentPlayerSpeed;
         }
         if (keys.a.pressed) {
-            boundaryCopied.position.x += playerSpeed;
+            boundaryCopied.position.x += currentPlayerSpeed;
         }
         if (keys.d.pressed) {
-            boundaryCopied.position.x -= playerSpeed;
+            boundaryCopied.position.x -= currentPlayerSpeed;
         }
 
         if (
@@ -162,19 +165,19 @@ function animate() {
     for (const movable of movables) {
         if (keys.w.pressed) {
             player.image = player.sprites.up;
-            movable.position.y += playerSpeed;
+            movable.position.y += currentPlayerSpeed;
         }
         if (keys.s.pressed) {
             player.image = player.sprites.down;
-            movable.position.y -= playerSpeed;
+            movable.position.y -= currentPlayerSpeed;
         }
         if (keys.a.pressed) {
             player.image = player.sprites.left;
-            movable.position.x += playerSpeed;
+            movable.position.x += currentPlayerSpeed;
         }
         if (keys.d.pressed) {
             player.image = player.sprites.right;
-            movable.position.x -= playerSpeed;
+            movable.position.x -= currentPlayerSpeed;
         }
     }
 }
@@ -194,6 +197,10 @@ document.addEventListener("keydown", (event) => {
         case "d":
             keys.d.pressed = true;
             break;
+        case "shift":
+            currentPlayerSpeed = maxPlayerSpeed / 2;
+            player.frameSpeed = defaultFrameSpeed * 2;
+            break;
     }
 });
 
@@ -211,6 +218,10 @@ document.addEventListener("keyup", (event) => {
             break;
         case "d":
             keys.d.pressed = false;
+            break;
+        case "shift":
+            currentPlayerSpeed = maxPlayerSpeed;
+            player.frameSpeed = defaultFrameSpeed;
             break;
     }
 });
