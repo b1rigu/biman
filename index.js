@@ -8,7 +8,9 @@ const canvasWidth = 1024;
 const canvasHeight = 576;
 const defaultFrameSpeed = 8;
 
-const mainCanvas = getCanvas(canvasWidth, canvasHeight);
+const mainCanvas = document.querySelector("canvas");
+mainCanvas.width = canvasWidth;
+mainCanvas.height = canvasHeight;
 const mainContext = getContext2d(mainCanvas);
 const backgroundCanvas = document.createElement("canvas");
 backgroundCanvas.width = canvasWidth;

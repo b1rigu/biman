@@ -22,13 +22,6 @@ function isRectangularsColliding({ rectangle1, rectangle2 }) {
     );
 }
 
-function getCanvas(width, height) {
-    const canvas = document.querySelector("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    return canvas;
-}
-
 function getContext2d(canvas) {
     const context = canvas.getContext("2d", { alpha: false });
     context.imageSmoothingEnabled = false;
