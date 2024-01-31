@@ -77,9 +77,4 @@ class Boundary {
         this.width = widthHeight;
         this.height = widthHeight;
     }
-
-    draw() {
-        backgroundContext.fillStyle = "transparent";
-        backgroundContext.fillRect(this.position.x, this.position.y, this.width, this.height);
-    }
 }

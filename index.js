@@ -128,20 +128,21 @@ function storySequencePlayer() {
 
     switch (storySequencyTimelineIndex) {
         case 0:
-            backgroundContext.fillStyle = "white";
-            backgroundContext.font = "40px arial";
-            let textString = "Year 2023, Someplace in the countryside";
-            const textWidth = backgroundContext.measureText(textString).width;
-            backgroundContext.fillText(
-                textString,
-                backgroundCanvas.width / 2 - textWidth / 2,
-                backgroundCanvas.height / 2
-            );
-            mainContext.drawImage(backgroundCanvas, 0, 0);
-            setTimeout(() => {
-                storySequencyTimelineIndex++;
-                storySequencePlayer();
-            }, 5000);
+            mainLoop();
+            // backgroundContext.fillStyle = "white";
+            // backgroundContext.font = "40px arial";
+            // let textString = "Year 2023, Someplace in the countryside";
+            // const textWidth = backgroundContext.measureText(textString).width;
+            // backgroundContext.fillText(
+            //     textString,
+            //     backgroundCanvas.width / 2 - textWidth / 2,
+            //     backgroundCanvas.height / 2
+            // );
+            // mainContext.drawImage(backgroundCanvas, 0, 0);
+            // setTimeout(() => {
+            //     storySequencyTimelineIndex++;
+            //     storySequencePlayer();
+            // }, 5000);
             break;
         case 1:
             // TODO
@@ -158,9 +159,6 @@ function mainLoop() {
     if (!canRunLoop(fps)) return;
 
     background.update();
-    for (const boundary of boundaries) {
-        boundary.draw();
-    }
     shadow.update();
     player.update();
     foreground.update();
