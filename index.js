@@ -147,9 +147,6 @@ function storySequencePlayer() {
         case 1:
             // TODO
             break;
-        case 2:
-            mainLoop();
-            break;
     }
 }
 
@@ -166,6 +163,10 @@ function mainLoop() {
 
     mainContext.drawImage(backgroundCanvas, 0, 0);
 
+    movementCalc();
+}
+
+function movementCalc() {
     player.moving = false;
 
     if (!keys.w.pressed && !keys.s.pressed && !keys.a.pressed && !keys.d.pressed) return;
