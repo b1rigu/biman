@@ -47,6 +47,7 @@ const playerUpImage = createImage("./img/playerUp.png");
 const playerLeftImage = createImage("./img/playerLeft.png");
 const playerRightImage = createImage("./img/playerRight.png");
 const shadowImage = createImage("./img/shadow.png");
+const fogImage = createImage("./img/fog.png");
 
 const player = new Player({
     position: {
@@ -88,6 +89,15 @@ const background = new Sprite({
     frameSpeed: 15,
 });
 background.moving = true;
+
+const fog = new Sprite({
+    position: {
+        x: -500,
+        y: -500,
+    },
+    image: fogImage,
+    scale: 3,
+});
 
 const foreground = new Sprite({
     position: {
@@ -159,6 +169,7 @@ function mainLoop() {
     shadow.update();
     player.update();
     foreground.update();
+    fog.update();
     rain.update();
 
     mainContext.drawImage(backgroundCanvas, 0, 0);

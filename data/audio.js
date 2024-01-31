@@ -9,7 +9,7 @@ const audio = {
     }),
     walk: new Howl({
         src: "./audio/walk.ogg",
-        volume: 0.2,
+        volume: 0.4,
         html5: true,
         sprite: {
             main: [1680, 400, false],
