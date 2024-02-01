@@ -48,11 +48,14 @@ const playerLeftImage = createImage("./img/playerLeft.png");
 const playerRightImage = createImage("./img/playerRight.png");
 const shadowImage = createImage("./img/shadow.png");
 const fogImage = createImage("./img/fog.png");
+const gunImage = createImage("./img/pistol.png");
+const gunMirroredImage = createImage("./img/pistolMirrored.png");
+const bulletImage = createImage("./img/pistolAmmo.png");
 
 const player = new Player({
     position: {
-        x: backgroundCanvas.width / 2 - 64 / 8,
-        y: backgroundCanvas.height / 2 - 16 / 2,
+        x: backgroundCanvas.width / 2 - ((backgroundScale - 1) * 16) / 2,
+        y: backgroundCanvas.height / 2 - ((backgroundScale - 1) * 16) / 2,
     },
     image: playerDownImage,
     frames: {
@@ -67,10 +70,29 @@ const player = new Player({
     scale: backgroundScale - 1,
 });
 
+const gun = new Gun({
+    position: {
+        x: backgroundCanvas.width / 2,
+        y: backgroundCanvas.height / 2,
+    },
+    image: gunImage,
+    frames: {
+        max: 12,
+    },
+    sprites: {
+        mirrored: gunMirroredImage,
+    },
+    scale: backgroundScale - 2,
+    extras: {
+        degree: 0,
+    },
+    frameSpeed: 1,
+});
+
 const shadow = new Sprite({
     position: {
-        x: backgroundCanvas.width / 2 - 4,
-        y: backgroundCanvas.height / 2 + 16,
+        x: backgroundCanvas.width / 2 - 12,
+        y: backgroundCanvas.height / 2 + 8,
     },
     image: shadowImage,
     scale: backgroundScale - 1,
@@ -88,7 +110,7 @@ const background = new Sprite({
     scale: backgroundScale,
     frameSpeed: 15,
 });
-background.moving = true;
+background.animating = true;
 
 const fog = new Sprite({
     position: {
@@ -119,7 +141,7 @@ const rain = new Sprite({
     },
     scale: 2,
 });
-rain.moving = true;
+rain.animating = true;
 
 const boundaries = getBoundaries(
     collisionSymbol,
@@ -160,6 +182,8 @@ function storySequencePlayer() {
     }
 }
 
+const bullets = [];
+
 function mainLoop() {
     requestAnimationFrame(mainLoop);
 
@@ -168,6 +192,10 @@ function mainLoop() {
     background.update();
     shadow.update();
     player.update();
+    for (const bullet of bullets) {
+        bullet.draw();
+    }
+    gun.update();
     foreground.update();
     fog.update();
     rain.update();
@@ -178,11 +206,11 @@ function mainLoop() {
 }
 
 function movementCalc() {
-    player.moving = false;
+    player.animating = false;
 
     if (!keys.w.pressed && !keys.s.pressed && !keys.a.pressed && !keys.d.pressed) return;
 
-    player.moving = true;
+    player.animating = true;
 
     let canMoveHorizontally = true;
     let canMoveVertically = true;
@@ -203,7 +231,7 @@ function movementCalc() {
     }
 
     if (!canMoveHorizontally && !canMoveVertically) {
-        player.moving = false;
+        player.animating = false;
         return;
     }
 
@@ -285,4 +313,39 @@ document.querySelector(".play-button").addEventListener("click", (_) => {
     document.querySelector(".main-menu").style.display = "none";
     document.querySelector("canvas").style.display = "block";
     storySequencePlayer();
+});
+
+mainCanvas.addEventListener("mousemove", (event) => {
+    let delta = {
+        x: event.offsetX - backgroundCanvas.width / 2,
+        y: event.offsetY - backgroundCanvas.height / 2,
+    };
+    gun.extras.degree = (Math.atan2(delta.y, delta.x) * 180) / Math.PI;
+});
+
+mainCanvas.addEventListener("mousedown", (event) => {
+    const delta = {
+        x: event.offsetX - backgroundCanvas.width / 2,
+        y: event.offsetY - backgroundCanvas.height / 2,
+    };
+    const angle = Math.atan2(delta.y, delta.x);
+
+    const vx = Math.cos(angle - 45 * Math.PI) * 100;
+    const vy = Math.sin(angle - 45 * Math.PI) * 100;
+
+    if (!gun.animating) {
+        bullets.push(
+            new Bullet({
+                image: bulletImage,
+                goingVelocity: {
+                    x: vx,
+                    y: vy,
+                },
+                degree: gun.extras.degree,
+            })
+        );
+        audio.pistolShoot.play();
+
+        gun.animating = true;
+    }
 });

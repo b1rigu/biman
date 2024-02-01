@@ -14,6 +14,11 @@ const audio = {
         sprite: {
             main: [1680, 400, false],
         },
-        rate: 2
+        rate: 2,
+    }),
+    pistolShoot: new Howl({
+        src: "./audio/pistolShoot.mp3",
+        volume: 0.1,
+        html5: true,
     }),
 };

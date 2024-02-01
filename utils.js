@@ -119,3 +119,51 @@ function checkVerticalCollision(rect1, boundary) {
     }
     return false;
 }
+
+function drawImageAngled({
+    image,
+    mirroredImage,
+    degree,
+    originX,
+    originY,
+    x,
+    frameVal,
+    width,
+    height,
+    scale = 1,
+}) {
+    backgroundContext.save();
+
+    backgroundContext.translate(originX, originY);
+
+    backgroundContext.rotate((degree * Math.PI) / 180);
+
+    if (degree > 90 || degree < -90) {
+        // mirrored image the left half rotation
+        backgroundContext.drawImage(
+            mirroredImage,
+            frameVal,
+            0,
+            width,
+            height,
+            x,
+            0 - height / 2,
+            width * scale,
+            height * scale
+        );
+    } else {
+        backgroundContext.drawImage(
+            image,
+            frameVal,
+            0,
+            width,
+            height,
+            x,
+            0 - height / 2,
+            width * scale,
+            height * scale
+        );
+    }
+
+    backgroundContext.restore();
+}
