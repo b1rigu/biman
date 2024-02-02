@@ -147,7 +147,7 @@ function drawImageAngled({
             width,
             height,
             x,
-            0 - height / 2,
+            0 - height / 2 * scale,
             width * scale,
             height * scale
         );
@@ -159,7 +159,7 @@ function drawImageAngled({
             width,
             height,
             x,
-            0 - height / 2,
+            0 - height / 2 * scale,
             width * scale,
             height * scale
         );

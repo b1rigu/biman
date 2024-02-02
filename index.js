@@ -73,7 +73,7 @@ const player = new Player({
 const gun = new Gun({
     position: {
         x: backgroundCanvas.width / 2,
-        y: backgroundCanvas.height / 2,
+        y: backgroundCanvas.height / 2 + 12,
     },
     image: gunImage,
     frames: {
@@ -82,7 +82,7 @@ const gun = new Gun({
     sprites: {
         mirrored: gunMirroredImage,
     },
-    scale: backgroundScale - 2,
+    scale: backgroundScale - 2.5,
     extras: {
         degree: 0,
     },
@@ -336,6 +336,10 @@ mainCanvas.addEventListener("mousedown", (event) => {
     if (!gun.animating) {
         bullets.push(
             new Bullet({
+                position: {
+                    x: backgroundCanvas.width / 2,
+                    y: backgroundCanvas.height / 2 + 8,
+                },
                 image: bulletImage,
                 goingVelocity: {
                     x: vx,

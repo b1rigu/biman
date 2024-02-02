@@ -81,7 +81,7 @@ class Gun extends Sprite {
             degree: this.extras.degree,
             originX: this.position.x,
             originY: this.position.y,
-            x: 20,
+            x: 14,
             frameVal: (this.frames.val * this.image.width) / this.frames.max,
             width: this.image.width / this.frames.max,
             height: this.image.height,
@@ -107,13 +107,10 @@ class Gun extends Sprite {
 }
 
 class Bullet {
-    constructor({ image, goingVelocity, degree }) {
-        this.position = {
-            x: backgroundCanvas.width / 2,
-            y: backgroundCanvas.height / 2,
-        };
-        this.width = 16;
-        this.height = 16;
+    constructor({ position, image, goingVelocity, degree }) {
+        this.position = position;
+        this.width = 8;
+        this.height = 8;
         this.goingVelocity = goingVelocity;
         this.image = image;
         this.degree = degree;
@@ -128,8 +125,8 @@ class Bullet {
             originY: this.position.y,
             x: 0,
             frameVal: 0,
-            width: this.image.width,
-            height: this.image.height,
+            width: this.width,
+            height: this.height,
         });
 
         if (
