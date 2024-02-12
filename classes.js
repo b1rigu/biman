@@ -28,7 +28,6 @@ class Sprite {
     }
 
     update() {
-        this.draw();
         const canAddFrameResult = this.canAddFrame();
         if (canAddFrameResult === "add") this.frames.val++;
         else if (canAddFrameResult === "zero") this.frames.val = 0;
@@ -64,7 +63,6 @@ class Sprite {
 
 class Player extends Sprite {
     update() {
-        this.draw();
         const canAddFrameResult = this.canAddFrame();
         if (canAddFrameResult === "add") {
             if (this.frames.val % 2 === 0) audio.walk.play("main");
@@ -116,6 +114,20 @@ class Bullet {
         this.degree = degree;
     }
 
+    update() {
+        if (
+            this.position.x + this.width >= 0 &&
+            this.position.x <= 0 + backgroundCanvas.width &&
+            this.position.y <= 0 + backgroundCanvas.height &&
+            this.position.y + this.height >= 0
+        ) {
+            this.position.x -= this.goingVelocity.x;
+            this.position.y -= this.goingVelocity.y;
+        } else {
+            bullets.splice(0, 1);
+        }
+    }
+
     draw() {
         drawImageAngled({
             image: this.image,
@@ -128,18 +140,6 @@ class Bullet {
             width: this.width,
             height: this.height,
         });
-
-        if (
-            this.position.x + this.width >= 0 &&
-            this.position.x <= 0 + backgroundCanvas.width &&
-            this.position.y <= 0 + backgroundCanvas.height &&
-            this.position.y + this.height >= 0
-        ) {
-            this.position.x -= this.goingVelocity.x;
-            this.position.y -= this.goingVelocity.y;
-        } else {
-            bullets.splice(0, 1);
-        }
     }
 }
 

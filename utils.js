@@ -1,14 +1,18 @@
-let msPrev = performance.now();
+let msPrevs = {};
 function canRunLoop(fps) {
+
+    if (!(fps.toString() in msPrevs)) {
+        msPrevs[fps.toString()] = performance.now();
+    }
     const msPerFrame = 1000 / fps;
 
     const msNow = performance.now();
-    const msPassed = msNow - msPrev;
+    const msPassed = msNow - msPrevs[fps.toString()];
 
     if (msPassed < msPerFrame) return false;
 
     const excessTime = msPassed % msPerFrame;
-    msPrev = msNow - excessTime;
+    msPrevs[fps.toString()] = msNow - excessTime;
 
     return true;
 }

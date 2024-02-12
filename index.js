@@ -1,4 +1,4 @@
-const fps = 60;
+const physicsFPS = 60;
 const maxPlayerSpeed = 5;
 const tilesPerRowOnMap = 167;
 const backgroundScale = 3;
@@ -160,7 +160,8 @@ function storySequencePlayer() {
 
     switch (storySequencyTimelineIndex) {
         case 0:
-            mainLoop();
+            animationLoop();
+            physicsLoop();
             // backgroundContext.fillStyle = "white";
             // backgroundContext.font = "40px arial";
             // let textString = "Year 2023, Someplace in the countryside";
@@ -184,23 +185,38 @@ function storySequencePlayer() {
 
 const bullets = [];
 
-function mainLoop() {
-    requestAnimationFrame(mainLoop);
+function animationLoop() {
+    requestAnimationFrame(animationLoop);
 
-    if (!canRunLoop(fps)) return;
+    background.draw();
+    shadow.draw();
+    player.draw();
+    for (const bullet of bullets) {
+        bullet.draw();
+    }
+    gun.draw();
+    foreground.draw();
+    fog.draw();
+    rain.draw();
+
+    mainContext.drawImage(backgroundCanvas, 0, 0);  
+}
+
+function physicsLoop() {
+    requestAnimationFrame(physicsLoop);
+
+    if (!canRunLoop(physicsFPS)) return;
 
     background.update();
     shadow.update();
     player.update();
     for (const bullet of bullets) {
-        bullet.draw();
+        bullet.update();
     }
     gun.update();
     foreground.update();
     fog.update();
     rain.update();
-
-    mainContext.drawImage(backgroundCanvas, 0, 0);
 
     movementCalc();
 }
